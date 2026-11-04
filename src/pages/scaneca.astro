@@ -1,0 +1,361 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { extras, euro } from '../data/studio';
+import scaneca from '../assets/img/scaneca-product.jpg';
+
+const scanPrice = euro(extras.find((e) => e.id === 'scan')!.price, { decimals: false });
+const biaPrice = euro(extras.find((e) => e.id === 'bia')!.price, { decimals: false });
+
+const benefits = [
+  { icon: 'scan', title: 'Ist-Zustand erfassen', text: 'Eine detaillierte Bestandsaufnahme deines Körpers – Maße und Proportionen in 3D.' },
+  { icon: 'chart', title: 'Veränderungen sichtbar machen', text: 'Sieh schwarz auf weiß, was sich durch dein Training verändert.' },
+  { icon: 'copy', title: 'Vorher-Nachher-Vergleiche', text: 'Vergleiche zwei Scans direkt miteinander und erkenne Entwicklungen.' },
+  { icon: 'clipboard', title: 'Fortschritte dokumentieren', text: 'Deine Trainingsfortschritte bleiben nachvollziehbar dokumentiert.' },
+] as const;
+
+const zones = ['Brust', 'Taille', 'Hüfte', 'Oberschenkel'];
+---
+
+<Base
+  title="SCANECA 3D-Körperscan"
+  description="SCANECA 3D-Körperscan im SFG Studio Mülheim (Mosel): Körpermaße und Proportionen in 3D erfassen und Trainingsfortschritte sichtbar machen – 20 € pro Scan."
+>
+  <PageHero
+    crumb="SCANECA"
+    eyebrow="Neu im Studio · 3D-Körperscan"
+    title="Deinen Körper <em>verstehen.</em>"
+    lead="Wo stehst du aktuell – und was verändert sich durch dein Training? Der SCANECA 3D-Körperscanner macht deine Fortschritte sichtbar."
+  >
+    <div class="price-chip" data-reveal>
+      <span class="price-chip__value">{scanPrice}</span>
+      <span class="price-chip__label">pro Scan</span>
+    </div>
+    <div class="btn-row" data-reveal>
+      <a class="btn" href="/probetraining?anliegen=scan" data-magnetic>
+        Scan-Termin anfragen <Icon name="arrow-right" class="btn__icon" />
+      </a>
+      <a class="btn btn--ghost" href="#vergleich">Scan oder BIA?</a>
+    </div>
+
+    <div slot="visual" class="scanner" data-scanner>
+      <div class="scanner__stage">
+        <Image
+          src={scaneca}
+          alt="Person steht auf dem SCANECA 3D-Körperscanner"
+          widths={[320, 555]}
+          sizes="(min-width: 1000px) 420px, 80vw"
+          loading="eager"
+        />
+        <span class="scanner__beam" aria-hidden="true"></span>
+      </div>
+      <ul role="list" class="scanner__zones mono" aria-label="Erfasste Körperbereiche (Beispiele)">
+        {
+          zones.map((z, i) => (
+            <li style={`--i:${i}`}>
+              <span class="scanner__dot" aria-hidden="true" />
+              {z}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </PageHero>
+
+  <section class="section theme-light" aria-labelledby="benefits-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div>
+          <p class="eyebrow" data-reveal>Was der Scan kann</p>
+          <h2 id="benefits-title" class="h1" data-split>Fortschritt, den du sehen kannst.</h2>
+        </div>
+        <p class="lead" data-reveal>
+          Egal ob Muskelaufbau, Gewichtsreduktion oder Körperstraffung – der Scan zeigt dir, wo du heute stehst und
+          wie du dich entwickelst.
+        </p>
+      </div>
+      <ul role="list" class="benefit-grid">
+        {
+          benefits.map((b, i) => (
+            <li class="benefit" data-reveal>
+              <span class="benefit__num mono">0{i + 1}</span>
+              <span class="benefit__icon">
+                <Icon name={b.icon} size={26} />
+              </span>
+              <h3 class="h3">{b.title}</h3>
+              <p class="muted">{b.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section id="vergleich" class="section theme-dark" aria-labelledby="compare-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>Messen statt raten</p>
+        <h2 id="compare-title" class="h2" data-split>3D-Scan oder BIA-Analyse?</h2>
+        <p class="lead" data-reveal>Beide Messungen ergänzen sich – sie beantworten unterschiedliche Fragen.</p>
+      </div>
+      <div class="compare">
+        <article class="compare__card compare__card--scan" data-reveal>
+          <span class="compare__tag mono">SCANECA 3D-Scan</span>
+          <h3 class="h3">Wie sieht mein Körper aus?</h3>
+          <ul role="list">
+            <li><Icon name="check" size={18} /> Körpermaße und Proportionen</li>
+            <li><Icon name="check" size={18} /> Veränderungen anschaulich dokumentiert</li>
+            <li><Icon name="check" size={18} /> Vorher-Nachher-Vergleiche</li>
+          </ul>
+          <p class="compare__price">{scanPrice} <small>pro Scan</small></p>
+        </article>
+        <article class="compare__card" data-reveal>
+          <span class="compare__tag mono">BIA-Analyse</span>
+          <h3 class="h3">Woraus besteht mein Körper?</h3>
+          <ul role="list">
+            <li><Icon name="check" size={18} /> Fettanteil</li>
+            <li><Icon name="check" size={18} /> Wasseranteil</li>
+            <li><Icon name="check" size={18} /> Muskelmasse</li>
+          </ul>
+          <p class="compare__price">{biaPrice} <small>einmalig</small></p>
+        </article>
+      </div>
+      <p class="compare__hint" data-reveal>
+        <Icon name="clipboard" size={18} /> Tipp: Kombiniere die Messung mit einer individuellen Trainingsplanerstellung.
+      </p>
+    </div>
+  </section>
+
+  <section class="section theme-green" aria-labelledby="cta-title">
+    <div class="container scan-cta">
+      <h2 id="cta-title" class="h1" data-split>Dein Körper. Dein Ist-Zustand. Dein Fortschritt.</h2>
+      <div class="btn-row" data-reveal>
+        <a class="btn btn--dark" href="/probetraining?anliegen=scan" data-magnetic>
+          Jetzt Scan anfragen <Icon name="arrow-right" class="btn__icon" />
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .price-chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgb(238 242 232 / 0.08);
+    border: 1px solid var(--line-dark);
+  }
+  .price-chip__value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--green);
+  }
+  .price-chip__label {
+    color: var(--muted-on-dark);
+    font-size: 0.9rem;
+  }
+
+  .scanner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+  }
+  .scanner__stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: clamp(360px, 46vw, 560px);
+    border-radius: var(--radius-lg);
+    background: radial-gradient(60% 50% at 50% 95%, rgb(92 171 51 / 0.35), transparent 70%), #f4f4f2;
+    overflow: hidden;
+  }
+  .scanner__stage :global(img) {
+    height: 96%;
+    width: auto;
+    mix-blend-mode: multiply;
+  }
+  .scanner__beam {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 30%;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(92 171 51 / 0.12) 60%,
+      rgb(92 171 51 / 0.45) 97%,
+      var(--green) 98%,
+      transparent 100%
+    );
+    animation: beam 4s var(--ease-in-out) infinite;
+    pointer-events: none;
+  }
+  @keyframes beam {
+    0% {
+      transform: translateY(-100%);
+    }
+    55% {
+      transform: translateY(260%);
+    }
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+  .scanner__zones {
+    display: grid;
+    gap: 12px;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .scanner__zones li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgb(238 242 232 / 0.06);
+    border: 1px solid var(--line-dark);
+    animation: zone 4s var(--ease-in-out) infinite;
+    animation-delay: calc(0.45s + var(--i) * 0.35s);
+  }
+  .scanner__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+  @keyframes zone {
+    0%,
+    100% {
+      border-color: var(--line-dark);
+      background: rgb(238 242 232 / 0.06);
+    }
+    8%,
+    22% {
+      border-color: var(--green);
+      background: rgb(92 171 51 / 0.2);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scanner__beam,
+    .scanner__zones li {
+      animation: none;
+    }
+  }
+
+  .benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .benefit {
+    position: relative;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+  .benefit__num {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .benefit__icon {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: var(--ink);
+    color: var(--green);
+    margin-bottom: 16px;
+  }
+
+  .compare {
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 800px) {
+    .compare {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .compare__card {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+    padding: clamp(24px, 3vw, 40px);
+    border-radius: var(--radius-lg);
+    background: var(--ink-2);
+    border: 1px solid var(--line-dark);
+  }
+  .compare__card--scan {
+    border-color: var(--green);
+    background: linear-gradient(160deg, rgb(92 171 51 / 0.16), var(--ink-2) 60%);
+  }
+  .compare__tag {
+    font-size: var(--fs-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-soft);
+  }
+  .compare__card ul {
+    display: grid;
+    gap: 10px;
+  }
+  .compare__card li {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .compare__card li :global(svg) {
+    color: var(--green);
+  }
+  .compare__price {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    padding-top: 16px;
+    border-top: 1px solid var(--line-dark);
+  }
+  .compare__price small {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted-on-dark);
+  }
+  .compare__hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+    color: var(--muted-on-dark);
+  }
+  .compare__hint :global(svg) {
+    color: var(--green);
+    flex: none;
+  }
+
+  .scan-cta {
+    display: grid;
+    gap: 32px;
+    justify-items: start;
+  }
+  .scan-cta .h1 {
+    max-width: 16ch;
+  }
+</style>

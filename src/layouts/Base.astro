@@ -1,0 +1,103 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { studio, hours, verein } from '../data/studio';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Optional: strukturierte Daten nur auf der Startseite ausgeben */
+  schema?: boolean;
+}
+
+const {
+  title,
+  description = 'SFG Studio für Fitness & Gesundheit in Mülheim (Mosel): Das barrierefreie Fitnessstudio des SFG Bernkastel-Kues e.V. – lizenzierte Trainer, monatlich kündbar, kostenloses Probetraining.',
+  schema = false,
+} = Astro.props;
+
+const fullTitle = title ? `${title} | SFG Studio Mülheim (Mosel)` : 'SFG Studio – Fitness & Gesundheit in Mülheim (Mosel)';
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ExerciseGym',
+  name: studio.fullName,
+  url: Astro.site?.toString(),
+  telephone: '+49 6534 9494300',
+  email: studio.email,
+  isAccessibleForFree: false,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: studio.street,
+    postalCode: studio.zip,
+    addressLocality: 'Mülheim (Mosel)',
+    addressCountry: 'DE',
+  },
+  parentOrganization: {
+    '@type': 'SportsOrganization',
+    name: verein.longName,
+    url: verein.web,
+  },
+  openingHoursSpecification: hours.flatMap((d) =>
+    d.slots.map(([opens, closes]) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: `https://schema.org/${d.schema}`,
+      opens,
+      closes,
+    })),
+  ),
+  sameAs: [studio.facebook],
+};
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0b100a" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content="SFG Studio" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og.jpg', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>
+      // JS ist aktiv → Reveal-Startzustände erlauben. Fallback, falls das Motion-Skript nicht lädt.
+      document.documentElement.classList.add('js');
+      setTimeout(function () {
+        if (!document.documentElement.classList.contains('motion-ready')) {
+          document.documentElement.classList.add('motion-failed');
+        }
+      }, 3000);
+    </script>
+
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <div class="grain" aria-hidden="true"></div>
+
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  updated?: string;
+}
+const { title, updated } = Astro.props;
+---
+
+<Base title={title} description={`${title} – SFG Studio Mülheim (Mosel)`}>
+  <article class="legal">
+    <header class="legal__head theme-dark">
+      <div class="container legal__inner">
+        <nav aria-label="Brotkrumen" class="crumbs mono">
+          <a href="/">Start</a><span aria-hidden="true">/</span><span aria-current="page">{title}</span>
+        </nav>
+        <h1 class="h1">{title}</h1>
+        {updated && <p class="legal__updated mono">Stand: {updated}</p>}
+      </div>
+    </header>
+    <div class="legal__main theme-light">
+      <div class="container legal__inner legal__body">
+        <slot />
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .legal__head {
+    padding-top: calc(var(--header-h) + clamp(48px, 8vh, 96px));
+    padding-bottom: clamp(40px, 6vw, 72px);
+  }
+  .legal__main {
+    padding-block: clamp(40px, 6vw, 72px) var(--section);
+    min-height: 50vh;
+  }
+  .legal__inner {
+    max-width: 820px;
+    display: grid;
+    gap: 20px;
+  }
+  .crumbs {
+    display: flex;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+  .crumbs a {
+    text-decoration: none;
+  }
+  .legal__updated {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .legal__body {
+    display: grid;
+    gap: 16px;
+  }
+  .legal__body :global(h2) {
+    margin-top: 32px;
+    font-size: 1.5rem;
+    font-stretch: 106%;
+    letter-spacing: -0.02em;
+  }
+  .legal__body :global(h3) {
+    margin-top: 12px;
+    font-size: 1.1rem;
+  }
+  .legal__body :global(p),
+  .legal__body :global(li) {
+    color: #2c3429;
+    max-width: 68ch;
+  }
+  .legal__body :global(ul) {
+    padding-left: 1.2em;
+    display: grid;
+    gap: 6px;
+  }
+  .legal__body :global(a) {
+    color: var(--green-text);
+  }
+  .legal__body :global(.todo) {
+    background: #fff3c4;
+    border-radius: 4px;
+    padding: 0 4px;
+    font-weight: 600;
+  }
+  .legal__body :global(.note) {
+    padding: 16px 20px;
+    border-radius: var(--radius-sm);
+    background: #fff3c4;
+    border: 1px solid #ecd27a;
+    font-size: 0.95rem;
+  }
+</style>

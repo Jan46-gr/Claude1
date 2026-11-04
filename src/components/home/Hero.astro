@@ -1,0 +1,328 @@
+---
+import { Image } from 'astro:assets';
+import Logo from '../Logo.astro';
+import Icon from '../Icon.astro';
+import Status from '../Status.astro';
+import studioWide from '../../assets/img/studio-wide.jpg';
+import platform from '../../assets/img/platform.jpg';
+---
+
+<section class="hero theme-dark" aria-labelledby="hero-title">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__glow"></div>
+    <div class="hero__mark"><Logo variant="mark" label="" /></div>
+  </div>
+
+  <div class="container hero__inner">
+    <div class="hero__meta" data-reveal>
+      <p class="eyebrow">SFG Bernkastel-Kues e.V. · Mülheim (Mosel)</p>
+      <Status />
+    </div>
+
+    <h1 id="hero-title" class="hero__title display" data-split="load" data-delay="0.15">
+      <span class="hero__line">Stärker werden.</span>
+      <span class="hero__line hero__line--accent">Gesund bleiben.</span>
+    </h1>
+
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <p class="lead" data-reveal>
+          Wir heißen jeden willkommen: Das Fitness- und Gesundheitsstudio des SFG – barrierefrei,
+          monatlich kündbar und mit lizenzierten Trainern an deiner Seite.
+        </p>
+        <div class="btn-row" data-reveal>
+          <a class="btn" href="/probetraining" data-magnetic>
+            Kostenloses Probetraining <Icon name="arrow-right" class="btn__icon" />
+          </a>
+          <a class="btn btn--ghost" href="#tarife">Tarife ab 19,90 €</a>
+        </div>
+        <ul role="list" class="hero__facts mono" data-reveal>
+          <li><Icon name="check" size={16} /> Keine Jahresverträge</li>
+          <li><Icon name="accessible" size={16} /> Barrierefrei</li>
+          <li><Icon name="clock" size={16} /> 7 Tage die Woche</li>
+        </ul>
+      </div>
+
+      <div class="hero__visual" data-hero-visual>
+        <figure class="hero__photo hero__photo--main media" data-reveal>
+          <div class="hero__photo-inner" data-speed="-0.6">
+            <Image
+              src={studioWide}
+              alt="Blick in den Gerätebereich des SFG Studios mit grünen Stahlträgern und Holzboden"
+              widths={[480, 720, 972]}
+              sizes="(min-width: 1100px) 560px, 92vw"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+        </figure>
+        <figure class="hero__photo hero__photo--small media" data-reveal>
+          <div class="hero__photo-inner" data-speed="0.8">
+            <Image
+              src={platform}
+              alt="Gewichtheberplattform mit Rack, Hantelscheiben und Kettlebells"
+              widths={[320, 480]}
+              sizes="(min-width: 1100px) 280px, 46vw"
+            />
+          </div>
+        </figure>
+        <div class="hero__badge" aria-hidden="true">
+          <svg viewBox="0 0 200 200" class="hero__badge-text">
+            <defs>
+              <path id="badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
+            </defs>
+            <text>
+              <textPath href="#badge-circle" startOffset="0">
+                SFG STUDIO • FÜR FITNESS &amp; GESUNDHEIT • SEIT 1991 •
+              </textPath>
+            </text>
+          </svg>
+          <Logo variant="mark" class="hero__badge-mark" label="" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#intro" class="hero__scroll" aria-label="Weiter nach unten scrollen">
+    <span></span>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    padding-top: calc(var(--header-h) + clamp(32px, 6vh, 72px));
+    padding-bottom: clamp(64px, 9vh, 112px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .hero__glow {
+    position: absolute;
+    width: 90vmax;
+    height: 90vmax;
+    right: -35vmax;
+    top: -45vmax;
+    background: radial-gradient(closest-side, rgb(92 171 51 / 0.32), rgb(92 171 51 / 0.08) 55%, transparent);
+    filter: blur(10px);
+  }
+  .hero__mark {
+    position: absolute;
+    width: min(78vw, 980px);
+    left: -18vw;
+    bottom: -32vw;
+    color: var(--green);
+    opacity: 0.045;
+    animation: spin 120s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: clamp(24px, 4vh, 40px);
+  }
+
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .hero__title {
+    font-size: clamp(3rem, 0.6rem + 7.4vw, 8.4rem);
+    display: grid;
+  }
+  .hero__line {
+    display: block;
+  }
+  .hero__line--accent {
+    color: var(--green);
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: 48px;
+    margin-top: clamp(8px, 2vh, 24px);
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: 28px;
+    align-content: start;
+  }
+  .hero__copy .lead {
+    color: var(--text-on-dark);
+    opacity: 0.86;
+    max-width: 34ch;
+  }
+
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted-on-dark);
+  }
+  .hero__facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero__facts :global(svg) {
+    color: var(--green);
+  }
+
+  .hero__visual {
+    position: relative;
+    min-height: 360px;
+  }
+  .hero__photo {
+    position: absolute;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.6);
+  }
+  .hero__photo-inner {
+    position: absolute;
+    inset: -12% 0;
+  }
+  .hero__photo-inner :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__photo--main {
+    inset: 0 0 18% 12%;
+  }
+  .hero__photo--small {
+    width: 46%;
+    aspect-ratio: 4 / 3;
+    left: 0;
+    bottom: 0;
+    border: 6px solid var(--ink);
+    border-radius: calc(var(--radius) + 6px);
+  }
+
+  .hero__badge {
+    position: absolute;
+    width: clamp(112px, 15vw, 168px);
+    aspect-ratio: 1;
+    right: -6px;
+    bottom: -10px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--green);
+    color: var(--ink);
+    box-shadow: 0 20px 50px -20px rgb(92 171 51 / 0.6);
+  }
+  .hero__badge-text {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    animation: spin 22s linear infinite;
+  }
+  .hero__badge-text text {
+    font-family: var(--mono);
+    font-size: 13.4px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    fill: var(--ink);
+  }
+  .hero__badge :global(.hero__badge-mark) {
+    width: 40%;
+    color: var(--ink);
+  }
+
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    width: 26px;
+    height: 42px;
+    margin-left: -13px;
+    border-radius: 999px;
+    border: 1.5px solid rgb(238 242 232 / 0.3);
+    display: none;
+  }
+  .hero__scroll span {
+    position: absolute;
+    left: 50%;
+    top: 8px;
+    width: 3px;
+    height: 8px;
+    margin-left: -1.5px;
+    border-radius: 2px;
+    background: var(--green);
+    animation: scroll-hint 1.8s var(--ease-in-out) infinite;
+  }
+  @keyframes scroll-hint {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(16px);
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 559px) {
+    .hero__meta .eyebrow {
+      display: none;
+    }
+    .hero__inner {
+      gap: 20px;
+    }
+    .hero__copy {
+      gap: 22px;
+    }
+  }
+
+  @media (min-width: 720px) {
+    .hero__visual {
+      min-height: 460px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      align-items: start;
+    }
+    .hero__visual {
+      min-height: 0;
+      height: clamp(380px, 46vh, 520px);
+      margin-top: -40px;
+    }
+    .hero__scroll {
+      display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__mark,
+    .hero__badge-text,
+    .hero__scroll span {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,508 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import WaveLab from '../components/WaveLab.astro';
+import Icon from '../components/Icon.astro';
+import { wellengangCourses, studio } from '../data/studio';
+import device from '../assets/img/wellengang-device.jpg';
+import room from '../assets/img/wellengang-room.jpg';
+
+const benefits = [
+  'Geeignet für jeden – unabhängig von Alter und Fitnesslevel',
+  'Mehr Wohlbefinden durch Ganzkörper-Schwingungstraining',
+  'Top-Trainingsgeräte der wellengang-Serie',
+  'Zertifizierte Therapeuten gestalten das Training',
+  'Training in der Gruppe macht Spaß und motiviert',
+  'Deine Krankenkasse beteiligt sich mit bis zu 100 % an den Kosten',
+];
+
+const steps = [
+  {
+    title: 'Simuliert den Gang',
+    text: 'Die Wipp-Bewegungen der Plattform führen zu Kipp-Bewegungen des Beckens – genau wie beim Gehen. Dein Körper hält die Balance mit rhythmischen Muskelkontraktionen.',
+  },
+  {
+    title: 'Frequenz frei wählbar',
+    text: 'Zwischen 1 und 12 Hertz werden unterschiedliche Effekte erzielt: von Balance und Koordination über Dehnfähigkeit bis zur Steigerung der Muskelkraft.',
+  },
+  {
+    title: 'Kombiniert mit Übungen',
+    text: 'Kräftigungs-, Koordinations- und Gymnastikübungen werden zu einem effektiven Ganzkörpertraining – mit Fokus auf tiefe und oberflächliche Muskulatur.',
+  },
+];
+
+const groups = [
+  {
+    id: 'sport',
+    label: 'Sportler',
+    title: '(Leistungs-)Sport: Starte durch!',
+    text: 'Dynamisches Training mit dem wellengang als Vorbereitung auf den Wettkampf. Effiziente Leistungssteigerung und kürzere Regenerationsphasen helfen dir, dein Training zu optimieren – eine ideale Ergänzung zum klassischen Training.',
+    points: ['Mehr Kraft- und Leistungsfähigkeit', 'Bessere Balance und Koordination', 'Höhere Beweglichkeit'],
+  },
+  {
+    id: 'fitness',
+    label: 'Fitness',
+    title: 'Sanft trainieren für Fitness und Gesundheit',
+    text: 'Das sanfte Schwingungstraining lässt sich unabhängig von Alter oder Fitnesszustand betreiben und individuell anpassen.',
+    points: [
+      'Geringere Sturzgefahr durch mehr Muskelkraft und Stabilität',
+      'Effizientes Training der Tiefenmuskulatur',
+      'Unterstützt beim Abnehmen',
+      'Lockerung des Muskelapparates',
+    ],
+  },
+  {
+    id: 'ruecken',
+    label: 'Rücken',
+    title: 'Gezielt für einen starken Rücken',
+    text: 'Die regelmäßige Lockerung hilft bei Verspannungen, die Aktivierung der Rumpfmuskulatur sorgt für Stabilität.',
+    points: [
+      'Gezielt gegen Verspannungen',
+      'Lockerung des gesamten Muskelapparates',
+      'Mehr Muskelkraft und Stabilität',
+      'Effizientes Beckenbodentraining',
+    ],
+  },
+  {
+    id: 'stress',
+    label: 'Stress',
+    title: 'Abschalten und entspannen',
+    text: 'Liegende Übungen bringen mentale Entspannung und lösen Anspannung im Rücken.',
+    points: [
+      'Mentale Entspannung bei liegenden Übungen',
+      'Lockert Brust- und Lendenwirbelbereich bei gleichzeitiger Tiefenentspannung',
+      'Hilft bei stressbedingten muskulären Anspannungen',
+    ],
+  },
+  {
+    id: 'kraft',
+    label: 'Kräftigung',
+    title: 'Kraft auf allen Ebenen',
+    text: 'Das Schwingungstraining fordert die Muskulatur reflektorisch – auch die tiefliegenden Muskelschichten.',
+    points: [
+      'Steigerung von Schnell-, Maximal- und Reaktivkraft',
+      'Effizientes Training der Tiefenmuskulatur',
+      'Bessere Koordination und Muskelbalance',
+    ],
+  },
+];
+---
+
+<Base
+  title="Wellengang Schwingungstraining"
+  description="Wellengang Schwingungstraining im SFG Studio Mülheim (Mosel): gelenkschonendes Ganzkörpertraining für jedes Alter – Präventionskurse mit Krankenkassen-Zuschuss bis zu 100 %."
+>
+  <PageHero
+    crumb="Wellengang"
+    eyebrow="Schwingungstraining"
+    title="So natürlich wie Gehen. <em>Nur effizienter.</em>"
+    lead="Der wellengang simuliert den menschlichen Gang – gelenkschonend, natürlich und für jedes Alter geeignet. Effektiv, effizient, erfolgreich."
+  >
+    <div class="btn-row" data-reveal>
+      <a class="btn" href="/probetraining?anliegen=wellengang" data-magnetic>
+        Kurs anfragen <Icon name="arrow-right" class="btn__icon" />
+      </a>
+      <a class="btn btn--ghost" href="#praevention">Krankenkassen-Zuschuss</a>
+    </div>
+    <WaveLab slot="visual" />
+  </PageHero>
+
+  <section class="section theme-light" aria-labelledby="benefits-title">
+    <div class="container benefits">
+      <div class="benefits__media" data-reveal>
+        <Image src={device} alt="wellengang Trainingsgerät mit Plattform und Zugseilen" widths={[336]} sizes="(min-width: 900px) 336px, 70vw" />
+      </div>
+      <div>
+        <p class="eyebrow" data-reveal>Effizient, effektiv &amp; erfolgreich</p>
+        <h2 id="benefits-title" class="h2" data-split>Warum Schwingungstraining?</h2>
+        <ul role="list" class="benefits__list">
+          {
+            benefits.map((b) => (
+              <li data-reveal>
+                <span class="benefits__check">
+                  <Icon name="check" size={18} />
+                </span>
+                {b}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-dark" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div>
+          <p class="eyebrow" data-reveal>Das Konzept</p>
+          <h2 id="how-title" class="h1" data-split>So funktioniert’s.</h2>
+        </div>
+        <p class="lead" data-reveal>
+          Training an Geräten in Verbindung mit Rumpfstabilisierung hat sich längst als fester Bestandteil der
+          Prävention etabliert – mit besonderem Blick auf Tiefenmuskulatur und Bindegewebe.
+        </p>
+      </div>
+      <ol role="list" class="steps">
+        {
+          steps.map((s, i) => (
+            <li class="step" data-reveal>
+              <span class="step__num mono">0{i + 1}</span>
+              <h3 class="h3">{s.title}</h3>
+              <p class="muted">{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section theme-light-2" aria-labelledby="groups-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>Für wen?</p>
+        <h2 id="groups-title" class="h2" data-split>Ein Gerät, viele Ziele.</h2>
+      </div>
+
+      <div class="tabs" data-tabs data-reveal>
+        <div class="tabs__list" role="tablist" aria-label="Zielgruppen">
+          {
+            groups.map((g, i) => (
+              <button
+                role="tab"
+                type="button"
+                id={`tab-${g.id}`}
+                aria-controls={`panel-${g.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+                class="tabs__tab"
+              >
+                {g.label}
+              </button>
+            ))
+          }
+          <span class="tabs__indicator" aria-hidden="true" data-tab-indicator></span>
+        </div>
+        {
+          groups.map((g, i) => (
+            <div
+              role="tabpanel"
+              id={`panel-${g.id}`}
+              aria-labelledby={`tab-${g.id}`}
+              class="tabs__panel"
+              hidden={i !== 0}
+              tabindex="0"
+            >
+              <div>
+                <h3 class="h3">{g.title}</h3>
+                <p class="muted">{g.text}</p>
+              </div>
+              <ul role="list" class="tabs__points">
+                {g.points.map((p) => (
+                  <li>
+                    <Icon name="check" size={18} /> {p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="praevention" class="section theme-green" aria-labelledby="prev-title">
+    <div class="container prevention">
+      <div class="prevention__copy">
+        <p class="eyebrow" data-reveal>Präventionskurs</p>
+        <h2 id="prev-title" class="h1" data-split>Krankenkassen bezuschusst.</h2>
+        <p class="prevention__text" data-reveal>
+          Deine Krankenkasse beteiligt sich mit bis zu 100&nbsp;% an den Kosten des wellengang-Präventionskurses.
+          Für Preise und aktuelle Termine sprich uns einfach an.
+        </p>
+        <div class="btn-row" data-reveal>
+          <a class="btn btn--dark" href="/probetraining?anliegen=wellengang" data-magnetic>
+            Platz anfragen <Icon name="arrow-right" class="btn__icon" />
+          </a>
+          <a class="btn btn--ghost" href={studio.phoneHref}><Icon name="phone" size={18} /> {studio.phone}</a>
+        </div>
+      </div>
+      <div class="prevention__side" data-reveal>
+        <figure class="media prevention__img">
+          <Image src={room} alt="Kursraum für das wellengang Training" widths={[605]} sizes="(min-width: 900px) 520px, 92vw" />
+        </figure>
+        <div class="courses">
+          <p class="courses__title mono">Kurszeiten</p>
+          <ul role="list">
+            {
+              wellengangCourses.map((c) => (
+                <li>
+                  <span>{c.day}</span>
+                  <strong class="tabular">{c.time} Uhr</strong>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="courses__note">Termine bitte vorab im Studio bestätigen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .benefits {
+    display: grid;
+    gap: 48px;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .benefits {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 80px;
+    }
+  }
+  .benefits__media {
+    display: grid;
+    place-items: center;
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    background: radial-gradient(70% 60% at 50% 70%, var(--green-tint), var(--white));
+    border: 1px solid var(--line);
+  }
+  .benefits__media :global(img) {
+    mix-blend-mode: multiply;
+    max-height: 420px;
+    width: auto;
+  }
+  .benefits .h2 {
+    margin-top: 16px;
+  }
+  .benefits__list {
+    margin-top: 32px;
+    display: grid;
+  }
+  .benefits__list li {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding-block: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 1.05rem;
+    font-weight: 550;
+  }
+  .benefits__check {
+    width: 32px;
+    height: 32px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--green);
+    color: var(--ink);
+  }
+
+  .steps {
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 900px) {
+    .steps {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .step {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: 32px 28px;
+    border-radius: var(--radius-lg);
+    background: var(--ink-2);
+    border: 1px solid var(--line-dark);
+  }
+  .step__num {
+    font-size: 0.85rem;
+    color: var(--green);
+    margin-bottom: 24px;
+  }
+
+  .tabs {
+    padding: clamp(16px, 2.5vw, 28px);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+  .tabs__list {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 999px;
+    background: var(--paper);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs__tab {
+    position: relative;
+    z-index: 1;
+    flex: 1 0 auto;
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-weight: 650;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    transition: color 0.35s;
+  }
+  .tabs__tab[aria-selected='true'] {
+    color: var(--ink);
+  }
+  .tabs__indicator {
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 0;
+    width: 0;
+    border-radius: 999px;
+    background: var(--green);
+    transition:
+      transform 0.5s var(--ease-out),
+      width 0.5s var(--ease-out);
+  }
+  .tabs__panel {
+    display: grid;
+    gap: 32px;
+    padding: clamp(24px, 4vw, 48px) clamp(8px, 2vw, 24px) clamp(8px, 2vw, 20px);
+    animation: panel-in 0.6s var(--ease-out);
+  }
+  .tabs__panel[hidden] {
+    display: none;
+  }
+  .tabs__panel .h3 {
+    margin-bottom: 12px;
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.2rem);
+  }
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+  .tabs__points {
+    display: grid;
+    gap: 12px;
+  }
+  .tabs__points li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-weight: 550;
+  }
+  .tabs__points :global(svg) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--green-text);
+  }
+  @media (min-width: 900px) {
+    .tabs__panel {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+  }
+
+  .prevention {
+    display: grid;
+    gap: 48px;
+  }
+  @media (min-width: 1000px) {
+    .prevention {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+  .prevention__copy {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+  }
+  .prevention__text {
+    font-size: var(--fs-lead);
+    max-width: 44ch;
+  }
+  .prevention .btn--ghost {
+    box-shadow: inset 0 0 0 1.5px rgb(11 16 10 / 0.35);
+    --btn-hover: var(--ink);
+    --btn-hover-fg: var(--green);
+  }
+  .prevention__side {
+    display: grid;
+    gap: 12px;
+  }
+  .prevention__img {
+    aspect-ratio: 16 / 10;
+  }
+  .courses {
+    padding: 24px;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--text-on-dark);
+  }
+  .courses__title {
+    font-size: var(--fs-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-soft);
+    margin-bottom: 8px;
+  }
+  .courses li {
+    display: flex;
+    justify-content: space-between;
+    padding-block: 10px;
+    border-bottom: 1px solid var(--line-dark);
+  }
+  .courses__note {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: var(--muted-on-dark);
+  }
+</style>
+
+<script>
+  // Barrierefreie Tabs mit Pfeiltasten + gleitendem Indikator
+  const tabs = document.querySelector<HTMLElement>('[data-tabs]');
+  if (tabs) {
+    const buttons = [...tabs.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const indicator = tabs.querySelector<HTMLElement>('[data-tab-indicator]');
+    const moveIndicator = (btn: HTMLButtonElement) => {
+      if (!indicator) return;
+      indicator.style.width = `${btn.offsetWidth}px`;
+      indicator.style.transform = `translateX(${btn.offsetLeft}px)`;
+    };
+    const select = (btn: HTMLButtonElement, focus = false) => {
+      buttons.forEach((b) => {
+        const active = b === btn;
+        b.setAttribute('aria-selected', String(active));
+        b.tabIndex = active ? 0 : -1;
+        const panel = document.getElementById(b.getAttribute('aria-controls')!);
+        if (panel) panel.hidden = !active;
+      });
+      moveIndicator(btn);
+      if (focus) btn.focus();
+    };
+    buttons.forEach((btn, i) => {
+      btn.addEventListener('click', () => select(btn));
+      btn.addEventListener('keydown', (e) => {
+        const dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (dir) {
+          e.preventDefault();
+          select(buttons[(i + dir + buttons.length) % buttons.length], true);
+        }
+        if (e.key === 'Home') select(buttons[0], true);
+        if (e.key === 'End') select(buttons[buttons.length - 1], true);
+      });
+    });
+    const current = () => buttons.find((b) => b.getAttribute('aria-selected') === 'true') ?? buttons[0];
+    new ResizeObserver(() => moveIndicator(current())).observe(tabs);
+    document.fonts.ready.then(() => moveIndicator(current()));
+  }
+</script>

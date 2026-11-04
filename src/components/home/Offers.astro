@@ -1,0 +1,289 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import { extras, euro } from '../../data/studio';
+import scaneca from '../../assets/img/scaneca-product.jpg';
+import device from '../../assets/img/wellengang-device.jpg';
+
+const price = (id: string) => euro(extras.find((e) => e.id === id)!.price, { decimals: false });
+---
+
+<section id="angebote" class="offers section theme-light-2" aria-labelledby="offers-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>Mehr als Geräte</p>
+        <h2 id="offers-title" class="h1" data-split>Messen, planen, gezielt trainieren.</h2>
+      </div>
+      <p class="lead" data-reveal>
+        Mit Körperanalyse, individuellem Trainingsplan und Schwingungstraining holen wir mehr aus deinem Training
+        heraus.
+      </p>
+    </div>
+
+    <div class="bento">
+      <a href="/scaneca" class="tile tile--scan theme-dark" data-reveal>
+        <div class="tile__visual tile__visual--scan">
+          <Image src={scaneca} alt="SCANECA 3D-Körperscanner" widths={[320, 555]} sizes="(min-width: 900px) 280px, 60vw" />
+          <span class="scanline" aria-hidden="true"></span>
+        </div>
+        <div class="tile__body">
+          <span class="tile__tag mono">Neu im Studio</span>
+          <h3 class="tile__title">SCANECA 3D-Körperscan</h3>
+          <p class="muted">Deinen Körper verstehen, Fortschritte sichtbar machen – Maße und Proportionen in 3D.</p>
+          <div class="tile__foot">
+            <span class="tile__price">{price('scan')} <small>pro Scan</small></span>
+            <span class="tile__arrow"><Icon name="arrow-up-right" /></span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/wellengang" class="tile tile--wave" data-reveal>
+        <div class="tile__visual tile__visual--wave">
+          <svg class="tile__waves" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 100 Q 50 40 100 100 T 200 100 T 300 100 T 400 100" />
+            <path d="M0 120 Q 50 70 100 120 T 200 120 T 300 120 T 400 120" />
+            <path d="M0 80 Q 50 30 100 80 T 200 80 T 300 80 T 400 80" />
+          </svg>
+          <Image src={device} alt="wellengang Trainingsgerät" widths={[336]} sizes="200px" class="tile__device" />
+        </div>
+        <div class="tile__body">
+          <span class="tile__tag mono">Präventionskurs</span>
+          <h3 class="tile__title">Wellengang Schwingungstraining</h3>
+          <p class="muted">So natürlich wie Laufen, nur effizienter. Deine Krankenkasse beteiligt sich mit bis zu 100&nbsp;%.</p>
+          <div class="tile__foot">
+            <span class="tile__price">Effektiv · Effizient · Erfolgreich</span>
+            <span class="tile__arrow"><Icon name="arrow-up-right" /></span>
+          </div>
+        </div>
+      </a>
+
+      <div class="tile tile--small" data-reveal>
+        <span class="tile__icon"><Icon name="chart" /></span>
+        <h3 class="h3">BIA-Analyse</h3>
+        <p class="muted">Zusammensetzung von Fett, Wasser und Muskelmasse in deinem Körper.</p>
+        <p class="tile__price">{price('bia')} <small>einmalig</small></p>
+      </div>
+
+      <div class="tile tile--small" data-reveal>
+        <span class="tile__icon"><Icon name="clipboard" /></span>
+        <h3 class="h3">Individueller Trainingsplan</h3>
+        <p class="muted">Persönliche Trainingsplanerstellung inklusive Flexibilitätstest.</p>
+        <p class="tile__price">{price('plan')} <small>einmalig</small></p>
+      </div>
+
+      <div class="tile tile--small" data-reveal>
+        <span class="tile__icon"><Icon name="stethoscope" /></span>
+        <h3 class="h3">Physiotherapeutische Beratung</h3>
+        <p class="muted">Beratung und Training mit physiotherapeutischem Blick.</p>
+        <p class="tile__price"><small>nach Terminabsprache</small></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bento {
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 900px) {
+    .bento {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    .tile--scan,
+    .tile--wave {
+      grid-column: span 3;
+    }
+    .tile--small {
+      grid-column: span 2;
+    }
+  }
+
+  .tile {
+    position: relative;
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    border: 1px solid var(--line);
+    text-decoration: none;
+    overflow: hidden;
+    transition:
+      transform 0.6s var(--ease-out),
+      box-shadow 0.6s var(--ease-out);
+  }
+  a.tile:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px -30px rgb(11 16 10 / 0.45);
+  }
+
+  .tile--scan,
+  .tile--wave {
+    padding: 0;
+    grid-template-rows: auto 1fr;
+  }
+  .tile--scan {
+    background: var(--ink);
+    border-color: transparent;
+  }
+  .tile--wave {
+    background: var(--green-tint);
+    border-color: transparent;
+  }
+
+  .tile__visual {
+    position: relative;
+    height: clamp(240px, 26vw, 320px);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .tile__visual--scan {
+    background: radial-gradient(60% 80% at 50% 100%, rgb(92 171 51 / 0.35), transparent 70%), #f4f4f2;
+    margin: 12px 12px 0;
+    border-radius: calc(var(--radius-lg) - 10px);
+  }
+  .tile__visual--scan :global(img) {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    transition: transform 0.8s var(--ease-out);
+  }
+  .tile:hover .tile__visual--scan :global(img) {
+    transform: scale(1.04);
+  }
+  .scanline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 64px;
+    background: linear-gradient(to bottom, transparent, rgb(92 171 51 / 0.32) 85%, var(--green) 86%, transparent 88%);
+    animation: scan 3.2s var(--ease-in-out) infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes scan {
+    from {
+      transform: translateY(-40px);
+    }
+    to {
+      transform: translateY(calc(clamp(240px, 26vw, 320px) - 24px));
+    }
+  }
+
+  .tile__visual--wave :global(.tile__device) {
+    position: relative;
+    height: 88%;
+    width: auto;
+    mix-blend-mode: multiply;
+    transition: transform 0.8s var(--ease-out);
+  }
+  .tile:hover .tile__visual--wave :global(.tile__device) {
+    transform: translateY(-6px) rotate(-1.5deg);
+  }
+  .tile__waves {
+    position: absolute;
+    inset: 0;
+    width: 200%;
+    height: 100%;
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 2;
+    opacity: 0.55;
+    animation: waves 7s linear infinite;
+  }
+  .tile__waves path:nth-child(2) {
+    opacity: 0.5;
+  }
+  .tile__waves path:nth-child(3) {
+    opacity: 0.3;
+  }
+  @keyframes waves {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .tile__body {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    padding: 24px 28px 28px;
+  }
+  .tile__tag {
+    font-size: var(--fs-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-text);
+  }
+  .tile--scan .tile__tag {
+    color: var(--green-soft);
+  }
+  .tile__title {
+    font-size: clamp(1.6rem, 1.1rem + 1.4vw, 2.3rem);
+    font-weight: 750;
+    font-stretch: 108%;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .tile__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .tile__price {
+    font-weight: 750;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+  }
+  .tile__price small {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .tile__arrow {
+    width: 48px;
+    height: 48px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--green);
+    color: var(--ink);
+    transition: transform 0.6s var(--ease-out);
+  }
+  a.tile:hover .tile__arrow {
+    transform: rotate(45deg);
+  }
+
+  .tile--small {
+    gap: 12px;
+  }
+  .tile--small .tile__price {
+    margin-top: auto;
+    padding-top: 8px;
+  }
+  .tile__icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: var(--green-tint);
+    color: var(--green-text);
+    margin-bottom: 12px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scanline,
+    .tile__waves {
+      animation: none;
+    }
+  }
+</style>

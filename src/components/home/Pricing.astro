@@ -1,0 +1,520 @@
+---
+import Icon from '../Icon.astro';
+import { tariffs, extras, fees, dropIn, contractFacts, euro, verein } from '../../data/studio';
+
+const featured = tariffs.find((t) => t.featured) ?? tariffs[0];
+const monthly = featured.price + fees.grundbeitrag;
+const badges: Record<string, string> = {
+  voll: 'Ohne Zeitlimit',
+  morning: 'Mo–Fr bis 13 Uhr',
+  ermaessigt: 'In Ausbildung',
+};
+---
+
+<section id="tarife" class="pricing section theme-dark" aria-labelledby="pricing-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>Tarife</p>
+        <h2 id="pricing-title" class="h1" data-split>Man zahlt nicht für Gesundheit – man investiert.</h2>
+      </div>
+      <ul role="list" class="pricing__facts" data-reveal>
+        {
+          contractFacts.map((f) => (
+            <li>
+              <Icon name="check" size={20} /> {f}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <form class="calc" data-calc aria-label="Beitragsrechner" onsubmit="return false">
+      <fieldset class="calc__tariffs">
+        <legend class="calc__legend">1. Tarif wählen</legend>
+        {
+          tariffs.map((t) => (
+            <label class:list={['tariff', { 'tariff--featured': t.featured }]} data-reveal>
+              <input
+                type="radio"
+                name="tariff"
+                value={t.id}
+                data-price={t.price}
+                data-name={t.name}
+                checked={t.id === featured.id}
+                class="sr-only"
+              />
+              <span class="tariff__head">
+                <span class="tariff__badge mono">{badges[t.id]}</span>
+                <span class="tariff__radio" aria-hidden="true" />
+              </span>
+              <span class="tariff__name">{t.name}</span>
+              <span class="tariff__price tabular">
+                {euro(t.price)}
+                <small>/ Monat</small>
+              </span>
+              <span class="tariff__audience">{t.audience}</span>
+              <span class="tariff__features">
+                {t.features.map((f) => (
+                  <span>
+                    <Icon name="check" size={16} /> {f}
+                  </span>
+                ))}
+              </span>
+            </label>
+          ))
+        }
+      </fieldset>
+
+      <aside class="summary" aria-live="polite">
+        <div class="summary__top">
+          <p class="calc__legend">Dein Beitrag</p>
+          <p class="summary__total">
+            <span class="tabular" data-out="monthly">{euro(monthly)}</span>
+            <small>/ Monat</small>
+          </p>
+          <p class="summary__perday muted">
+            Das sind <strong class="tabular" data-out="perday">{euro(monthly / 30)}</strong> am Tag.
+          </p>
+        </div>
+
+        <dl class="summary__lines">
+          <div>
+            <dt data-out="tariffname">{featured.name}</dt>
+            <dd class="tabular" data-out="tariff">{euro(featured.price)}</dd>
+          </div>
+          <div>
+            <dt>Vereins-Grundbeitrag</dt>
+            <dd class="tabular">{euro(fees.grundbeitrag)}</dd>
+          </div>
+        </dl>
+
+        <fieldset class="summary__extras">
+          <legend class="calc__legend">2. Extras zum Start (optional)</legend>
+          {
+            extras.map((e) => (
+              <label class="check extra">
+                <input type="checkbox" name="extra" value={e.id} data-price={e.price} />
+                <span>
+                  <span class="extra__name">{e.name}</span>
+                  <span class="extra__price tabular">
+                    + {euro(e.price, { decimals: false })} {e.unit}
+                  </span>
+                </span>
+              </label>
+            ))
+          }
+        </fieldset>
+
+        <dl class="summary__lines summary__lines--once">
+          <div>
+            <dt>Einmalig zum Start <small>(inkl. {euro(fees.aufnahme, { decimals: false })} Aufnahmegebühr)</small></dt>
+            <dd class="tabular" data-out="once">{euro(fees.aufnahme)}</dd>
+          </div>
+        </dl>
+
+        <div class="summary__actions">
+          <a class="btn" href="/probetraining" data-magnetic>
+            Erst mal Probetraining <Icon name="arrow-right" class="btn__icon" />
+          </a>
+          <a class="link-arrow" href={verein.web} target="_blank" rel="noopener">
+            Aufnahmeantrag auf sfg-bks.de <Icon name="arrow-up-right" />
+          </a>
+        </div>
+      </aside>
+    </form>
+
+    <div class="dropin" data-reveal>
+      <div>
+        <h3 class="h3">Ohne Mitgliedschaft</h3>
+        <p class="muted">
+          Tarife sind gegen Aufpreis auch bar bezahlbar, jedoch ohne Mitgliedschaft – sprich uns dazu im Studio an.
+        </p>
+      </div>
+      <ul role="list" class="dropin__list">
+        {
+          dropIn.map((d) => (
+            <li>
+              <span>{d.name}</span>
+              <strong class="tabular">{euro(d.price, { decimals: false })}</strong>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pricing__facts {
+    display: grid;
+    gap: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    justify-self: start;
+  }
+  .pricing__facts li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .pricing__facts :global(svg) {
+    color: var(--green);
+  }
+
+  .calc {
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 1100px) {
+    .calc {
+      grid-template-columns: 1fr 400px;
+      align-items: start;
+    }
+  }
+
+  fieldset {
+    border: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .calc__legend {
+    font-family: var(--mono);
+    font-size: var(--fs-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-on-dark);
+    margin-bottom: 14px;
+    padding: 0;
+  }
+
+  .calc__tariffs {
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 720px) {
+    .calc__tariffs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .calc__tariffs .calc__legend {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .tariff {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: var(--ink-2);
+    border: 1.5px solid var(--line-dark);
+    cursor: pointer;
+    transition:
+      border-color 0.35s,
+      background-color 0.35s,
+      transform 0.5s var(--ease-out);
+  }
+  .tariff:hover {
+    border-color: rgb(92 171 51 / 0.5);
+  }
+  .tariff:has(input:checked) {
+    border-color: var(--green);
+    background: linear-gradient(160deg, rgb(92 171 51 / 0.16), var(--ink-2) 60%);
+  }
+  .tariff:has(input:focus-visible) {
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+  }
+  .tariff__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  .tariff__badge {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgb(238 242 232 / 0.08);
+    color: var(--muted-on-dark);
+  }
+  .tariff--featured .tariff__badge {
+    background: var(--green);
+    color: var(--ink);
+  }
+  .tariff__radio {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid rgb(238 242 232 / 0.35);
+    display: grid;
+    place-items: center;
+    transition: border-color 0.3s;
+  }
+  .tariff__radio::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--green);
+    transform: scale(0);
+    transition: transform 0.4s var(--ease-out);
+  }
+  .tariff:has(input:checked) .tariff__radio {
+    border-color: var(--green);
+  }
+  .tariff:has(input:checked) .tariff__radio::after {
+    transform: scale(1);
+  }
+  .tariff__name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-stretch: 106%;
+    letter-spacing: -0.02em;
+  }
+  .tariff__price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 8px;
+    font-size: clamp(2.3rem, 1.6rem + 1.6vw, 3rem);
+    font-weight: 800;
+    font-stretch: 110%;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .tariff__price small {
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--muted-on-dark);
+  }
+  .tariff__audience {
+    font-size: 0.88rem;
+    color: var(--green-soft);
+    min-height: 2.6em;
+  }
+  .tariff__features {
+    display: grid;
+    gap: 8px;
+    padding-top: 16px;
+    margin-top: auto;
+    border-top: 1px solid var(--line-dark);
+    font-size: 0.9rem;
+    color: var(--muted-on-dark);
+  }
+  .tariff__features span {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .tariff__features :global(svg) {
+    color: var(--green);
+    flex: none;
+    margin-top: 3px;
+  }
+
+  /* Zusammenfassung */
+  .summary {
+    position: relative;
+    display: grid;
+    gap: 22px;
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    color: var(--text);
+    --text-muted: #4a5446;
+    --line: rgb(11 16 10 / 0.12);
+    --green-text: #2f6d12;
+  }
+  @media (min-width: 1100px) {
+    .summary {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+      margin-top: 30px;
+    }
+  }
+  .summary .calc__legend {
+    color: var(--text-muted);
+  }
+  .summary__top .calc__legend {
+    margin-bottom: 6px;
+  }
+  .summary__total {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: clamp(2.8rem, 2rem + 2vw, 3.6rem);
+    font-weight: 800;
+    font-stretch: 110%;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .summary__total small {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--text-muted);
+  }
+  .summary__perday {
+    margin-top: 8px;
+    font-size: 0.92rem;
+  }
+  .summary__perday strong {
+    color: var(--green-text);
+  }
+  .summary__lines {
+    display: grid;
+    gap: 10px;
+    padding-block: 18px;
+    border-block: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  .summary__lines div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .summary__lines dt small {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+  .summary__lines dd {
+    font-weight: 650;
+  }
+  .summary__lines--once {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .summary__lines--once dd {
+    font-size: 1.15rem;
+  }
+  .summary__extras {
+    display: grid;
+    gap: 12px;
+  }
+  .summary__extras .calc__legend {
+    margin-bottom: 4px;
+  }
+  .extra {
+    color: var(--text);
+  }
+  .extra input {
+    border-color: rgb(11 16 10 / 0.25);
+  }
+  .extra > span {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2px 12px;
+  }
+  .extra__name {
+    font-weight: 550;
+  }
+  .extra__price {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  .summary__actions {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+  }
+  .summary__actions .link-arrow {
+    color: var(--green-text);
+    font-size: 0.92rem;
+  }
+
+  /* Ohne Mitgliedschaft */
+  .dropin {
+    margin-top: 16px;
+    display: grid;
+    gap: 24px;
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    border: 1.5px dashed rgb(238 242 232 / 0.18);
+  }
+  .dropin .muted {
+    margin-top: 8px;
+    max-width: 52ch;
+    font-size: 0.95rem;
+  }
+  .dropin__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .dropin__list li {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 14px 20px;
+    border-radius: var(--radius);
+    background: var(--ink-2);
+  }
+  .dropin__list strong {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  @media (min-width: 900px) {
+    .dropin {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, reduceMotion } from '../../scripts/motion';
+  import { fees } from '../../data/studio';
+
+  const form = document.querySelector<HTMLFormElement>('[data-calc]');
+  const fmt = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
+  const out = (key: string) => form?.querySelector<HTMLElement>(`[data-out="${key}"]`);
+
+  const values: Record<string, number> = {};
+  const animateTo = (key: string, value: number) => {
+    const el = out(key);
+    if (!el) return;
+    const from = values[key] ?? value;
+    values[key] = value;
+    if (reduceMotion || from === value) {
+      el.textContent = fmt.format(value);
+      return;
+    }
+    const state = { v: from };
+    gsap.to(state, {
+      v: value,
+      duration: 0.7,
+      ease: 'expo.out',
+      overwrite: true,
+      onUpdate: () => (el.textContent = fmt.format(state.v)),
+    });
+    gsap.fromTo(el, { y: from < value ? 8 : -8 }, { y: 0, duration: 0.6, ease: 'expo.out' });
+  };
+
+  const update = () => {
+    if (!form) return;
+    const tariff = form.querySelector<HTMLInputElement>('input[name="tariff"]:checked');
+    const tariffPrice = Number(tariff?.dataset.price ?? 0);
+    const monthly = tariffPrice + fees.grundbeitrag;
+    const extrasSum = [...form.querySelectorAll<HTMLInputElement>('input[name="extra"]:checked')].reduce(
+      (s, i) => s + Number(i.dataset.price),
+      0,
+    );
+    const name = out('tariffname');
+    if (name && tariff) name.textContent = tariff.dataset.name ?? '';
+    animateTo('tariff', tariffPrice);
+    animateTo('monthly', monthly);
+    animateTo('perday', monthly / 30);
+    animateTo('once', fees.aufnahme + extrasSum);
+  };
+
+  form?.addEventListener('change', update);
+  update();
+</script>

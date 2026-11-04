@@ -1,0 +1,400 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import Status from './Status.astro';
+import { studio } from '../data/studio';
+
+const nav = [
+  { label: 'Studio', href: '/#studio' },
+  { label: 'Tarife', href: '/#tarife' },
+  { label: 'Öffnungszeiten', href: '/#zeiten' },
+  { label: 'Wellengang', href: '/wellengang' },
+  { label: 'SCANECA', href: '/scaneca' },
+  { label: 'Kontakt', href: '/#kontakt' },
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a href="/" class="site-header__logo" aria-label="SFG Studio – zur Startseite">
+      <Logo label="SFG Studio" />
+    </a>
+
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <ul role="list">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="roll" aria-current={path === item.href ? 'page' : undefined}>
+                <span class="roll__clip"><span class="roll__inner" data-text={item.label}>{item.label}</span></span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <Status compact class="site-header__status" />
+      <a class="btn btn--sm site-header__cta" href="/probetraining" data-magnetic>Probetraining</a>
+      <button class="menu-btn" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu">
+        <span class="menu-btn__label">Menü</span>
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog id="menu" class="menu theme-dark" aria-label="Menü" data-menu>
+  <div class="menu__top">
+    <a href="/" class="menu__logo" aria-label="SFG Studio – zur Startseite"><Logo /></a>
+    <button class="menu__close" type="button" data-menu-close aria-label="Menü schließen">
+      <Icon name="close" size={26} />
+    </button>
+  </div>
+  <nav aria-label="Mobile Navigation">
+    <ul role="list" class="menu__list">
+      {
+        nav.map((item, i) => (
+          <li style={`--i:${i}`}>
+            <a href={item.href} data-menu-link>
+              <span class="menu__index mono">0{i + 1}</span>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+      <li style={`--i:${nav.length}`}>
+        <a href="/probetraining" data-menu-link class="menu__cta">
+          <span class="menu__index mono">→</span>
+          Probetraining
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="menu__bottom">
+    <Status />
+    <a href={studio.phoneHref} class="menu__contact"><Icon name="phone" size={18} /> {studio.phone}</a>
+    <a href={`mailto:${studio.email}`} class="menu__contact"><Icon name="mail" size={18} /> {studio.email}</a>
+  </div>
+</dialog>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    padding: 12px var(--gutter) 0;
+    transition: transform 0.6s var(--ease-out);
+    pointer-events: none;
+  }
+  .site-header__inner {
+    pointer-events: auto;
+    max-width: calc(var(--max) + 48px);
+    margin-inline: auto;
+    height: calc(var(--header-h) - 12px);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 0 10px 0 22px;
+    border-radius: 999px;
+    color: var(--text-on-dark);
+    border: 1px solid transparent;
+    transition:
+      background-color 0.5s var(--ease-out),
+      border-color 0.5s var(--ease-out),
+      backdrop-filter 0.5s;
+  }
+  :global(.is-scrolled) .site-header__inner {
+    background: rgb(11 16 10 / 0.72);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    border-color: rgb(238 242 232 / 0.08);
+  }
+  :global(.is-hidden).site-header {
+    transform: translateY(-120%);
+  }
+
+  .site-header__logo {
+    width: 132px;
+    flex: none;
+    color: var(--green);
+    transition: opacity 0.3s;
+  }
+  .site-header__logo:hover {
+    opacity: 0.85;
+  }
+
+  .site-nav {
+    margin-inline: auto;
+    display: none;
+  }
+  .site-nav ul {
+    display: flex;
+    gap: 4px;
+  }
+  .site-nav a {
+    display: block;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    font-weight: 550;
+    text-decoration: none;
+    color: rgb(238 242 232 / 0.86);
+    border-radius: 999px;
+    transition:
+      color 0.3s,
+      background-color 0.3s;
+  }
+  .site-nav a:hover,
+  .site-nav a[aria-current='page'] {
+    color: var(--white);
+  }
+  .site-nav a[aria-current='page'] {
+    background: rgb(238 242 232 / 0.08);
+  }
+
+  /* Roll-Effekt */
+  .roll__clip {
+    display: block;
+    overflow: hidden;
+    line-height: 1.3;
+  }
+  .roll__inner {
+    display: block;
+    position: relative;
+    transition: transform 0.5s var(--ease-out);
+  }
+  .roll__inner::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    color: var(--green-soft);
+  }
+  @media (hover: hover) {
+    .roll:hover .roll__inner {
+      transform: translateY(-100%);
+    }
+  }
+
+  .site-header__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .site-header__actions :global(.site-header__status) {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  :global(.is-scrolled) .site-header__actions :global(.site-header__status) {
+    opacity: 1;
+  }
+  .site-header__cta {
+    display: none;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 46px;
+    padding: 0 16px 0 20px;
+    border-radius: 999px;
+    background: rgb(238 242 232 / 0.1);
+    color: var(--text-on-dark);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+  }
+  .menu-btn:hover {
+    background: rgb(238 242 232 / 0.18);
+  }
+
+  @media (min-width: 560px) {
+    .site-header__cta {
+      display: inline-flex;
+    }
+    .site-header__logo {
+      width: 150px;
+    }
+  }
+  @media (min-width: 1120px) {
+    .site-nav {
+      display: block;
+    }
+    .menu-btn {
+      display: none;
+    }
+  }
+  @media (min-width: 1380px) {
+    .site-header__actions :global(.site-header__status) {
+      display: inline-flex;
+    }
+  }
+
+  /* ---------- Mobile-Menü ---------- */
+  .menu {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    padding: 12px var(--gutter) max(24px, env(safe-area-inset-bottom));
+    border: 0;
+    display: none;
+    flex-direction: column;
+    background: var(--ink);
+    overflow-y: auto;
+  }
+  .menu[open] {
+    display: flex;
+    animation: menu-in 0.6s var(--ease-out);
+  }
+  .menu::backdrop {
+    background: transparent;
+  }
+  @keyframes menu-in {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  .menu__top {
+    height: calc(var(--header-h) - 12px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 22px;
+  }
+  .menu__logo {
+    width: 140px;
+    color: var(--green);
+  }
+  .menu__close {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgb(238 242 232 / 0.1);
+  }
+  .menu__list {
+    margin-top: clamp(24px, 6vh, 64px);
+    display: grid;
+  }
+  .menu__list li {
+    border-bottom: 1px solid var(--line-dark);
+    animation: menu-item 0.8s var(--ease-out) both;
+    animation-delay: calc(0.15s + var(--i) * 0.05s);
+  }
+  @keyframes menu-item {
+    from {
+      opacity: 0;
+      transform: translateY(32px);
+    }
+  }
+  .menu__list a {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+    font-size: clamp(1.9rem, 8vw, 3.2rem);
+    font-weight: 750;
+    font-stretch: 110%;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    text-decoration: none;
+    transition:
+      color 0.3s,
+      padding 0.4s var(--ease-out);
+  }
+  .menu__list a:hover {
+    color: var(--green-soft);
+    padding-left: 8px;
+  }
+  .menu__index {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted-on-dark);
+    letter-spacing: 0;
+  }
+  .menu__cta {
+    color: var(--green);
+  }
+  .menu__bottom {
+    margin-top: auto;
+    padding-top: 32px;
+    display: grid;
+    gap: 12px;
+  }
+  .menu__contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted-on-dark);
+    text-decoration: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .menu[open],
+    .menu__list li {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const menu = document.querySelector<HTMLDialogElement>('[data-menu]');
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+
+  // Header: Hintergrund nach dem Scrollen, beim Runterscrollen ausblenden
+  let lastY = window.scrollY;
+  let ticking = false;
+  const update = () => {
+    const y = window.scrollY;
+    header?.classList.toggle('is-scrolled', y > 24);
+    const goingDown = y > lastY + 4;
+    const goingUp = y < lastY - 4;
+    if (goingDown && y > 640) header?.classList.add('is-hidden');
+    if (goingUp || y < 640) header?.classList.remove('is-hidden');
+    if (goingDown || goingUp) lastY = y;
+    ticking = false;
+  };
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    },
+    { passive: true },
+  );
+  update();
+
+  // Fokus im Header → immer sichtbar
+  header?.addEventListener('focusin', () => header.classList.remove('is-hidden'));
+
+  // Mobile-Menü
+  const lenis = () => (window as any).__lenis as { stop(): void; start(): void } | undefined;
+  openBtn?.addEventListener('click', () => {
+    menu?.showModal();
+    lenis()?.stop();
+    openBtn.setAttribute('aria-expanded', 'true');
+  });
+  const close = () => menu?.close();
+  closeBtn?.addEventListener('click', close);
+  menu?.addEventListener('close', () => {
+    lenis()?.start();
+    openBtn?.setAttribute('aria-expanded', 'false');
+  });
+  menu?.querySelectorAll('[data-menu-link]').forEach((a) => a.addEventListener('click', close));
+  window.matchMedia('(min-width: 1120px)').addEventListener('change', (e) => e.matches && close());
+</script>

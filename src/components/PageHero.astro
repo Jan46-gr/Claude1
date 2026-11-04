@@ -1,0 +1,89 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  crumb: string;
+}
+const { eyebrow, title, lead, crumb } = Astro.props;
+const hasVisual = Astro.slots.has('visual');
+---
+
+<section class:list={['page-hero theme-dark', { 'page-hero--visual': hasVisual }]}>
+  <div class="page-hero__glow" aria-hidden="true"></div>
+  <div class="container page-hero__grid">
+    <div class="page-hero__copy">
+      <nav aria-label="Brotkrumen" class="crumbs mono" data-reveal>
+        <a href="/">Start</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{crumb}</span>
+      </nav>
+      <p class="eyebrow" data-reveal>{eyebrow}</p>
+      <h1 class="h1 page-hero__title" data-split="load" set:html={title} />
+      {lead && <p class="lead page-hero__lead" data-reveal>{lead}</p>}
+      <slot />
+    </div>
+    {
+      hasVisual && (
+        <div class="page-hero__visual" data-reveal>
+          <slot name="visual" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    padding-top: calc(var(--header-h) + clamp(48px, 8vh, 96px));
+    padding-bottom: clamp(64px, 9vw, 128px);
+    isolation: isolate;
+  }
+  .page-hero__glow {
+    position: absolute;
+    z-index: -1;
+    width: 80vmax;
+    height: 80vmax;
+    right: -30vmax;
+    top: -40vmax;
+    background: radial-gradient(closest-side, rgb(92 171 51 / 0.28), transparent);
+    pointer-events: none;
+  }
+  .page-hero__grid {
+    display: grid;
+    gap: 48px;
+    align-items: center;
+  }
+  @media (min-width: 1000px) {
+    .page-hero--visual .page-hero__grid {
+      grid-template-columns: 1.05fr 1fr;
+    }
+  }
+  .page-hero__copy {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+  }
+  .page-hero__title :global(em) {
+    font-style: normal;
+    color: var(--green);
+  }
+  .page-hero__lead {
+    color: var(--text-on-dark);
+    opacity: 0.84;
+  }
+  .crumbs {
+    display: flex;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: var(--muted-on-dark);
+  }
+  .crumbs a {
+    text-decoration: none;
+  }
+  .crumbs a:hover {
+    color: var(--green-soft);
+  }
+</style>
