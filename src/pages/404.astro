@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<Base title="Seite nicht gefunden">
+  <section class="nf theme-dark">
+    <div class="container nf__inner">
+      <p class="nf__code" aria-hidden="true">404</p>
+      <h1 class="h1">Diese Seite macht gerade Pause.</h1>
+      <p class="lead">Die Seite gibt es nicht (mehr). Aber das Studio ist nur einen Klick entfernt.</p>
+      <div class="btn-row">
+        <a class="btn" href="/">Zur Startseite <Icon name="arrow-right" class="btn__icon" /></a>
+        <a class="btn btn--ghost" href="/probetraining">Probetraining</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 90svh;
+    display: grid;
+    align-items: center;
+    padding-top: var(--header-h);
+  }
+  .nf__inner {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+  }
+  .nf__code {
+    font-size: clamp(6rem, 3rem + 14vw, 16rem);
+    font-weight: 900;
+    font-stretch: 125%;
+    letter-spacing: -0.06em;
+    line-height: 0.8;
+    color: var(--green);
+  }
+</style>

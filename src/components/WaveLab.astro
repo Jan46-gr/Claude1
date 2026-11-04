@@ -1,0 +1,239 @@
+---
+/**
+ * Interaktive Visualisierung: Frequenz 1–12 Hz frei wählbar.
+ * Canvas zeichnet Schwingungslinien, Regler steuert Frequenz & Tempo.
+ */
+---
+
+<div class="wavelab" data-wavelab>
+  <div class="wavelab__screen">
+    <canvas data-wave-canvas aria-hidden="true"></canvas>
+    <div class="wavelab__readout">
+      <span class="wavelab__hz tabular" data-wave-hz>6</span>
+      <span class="wavelab__unit mono">Hz</span>
+    </div>
+  </div>
+  <div class="wavelab__controls">
+    <label for="wave-hz" class="wavelab__label mono">Frequenz wählen · 1–12 Hz</label>
+    <input id="wave-hz" type="range" min="1" max="12" step="1" value="6" data-wave-input aria-valuetext="6 Hertz" />
+    <div class="wavelab__scale mono" aria-hidden="true">
+      <span>1</span><span>12</span>
+    </div>
+    <ul role="list" class="wavelab__effects">
+      <li data-effect="0">Balance &amp; Koordination</li>
+      <li data-effect="1">Dehnfähigkeit</li>
+      <li data-effect="2">Muskelkraft</li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .wavelab {
+    display: grid;
+    gap: 20px;
+    padding: 18px;
+    border-radius: var(--radius-lg);
+    background: var(--ink-2);
+    border: 1px solid var(--line-dark);
+  }
+  .wavelab__screen {
+    position: relative;
+    height: clamp(220px, 28vw, 320px);
+    border-radius: calc(var(--radius-lg) - 8px);
+    background:
+      linear-gradient(rgb(238 242 232 / 0.04) 1px, transparent 1px) 0 0 / 100% 40px,
+      linear-gradient(90deg, rgb(238 242 232 / 0.04) 1px, transparent 1px) 0 0 / 40px 100%,
+      var(--ink);
+    overflow: hidden;
+  }
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .wavelab__readout {
+    position: absolute;
+    left: 20px;
+    top: 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .wavelab__hz {
+    font-size: clamp(2.6rem, 2rem + 2vw, 3.6rem);
+    font-weight: 800;
+    font-stretch: 110%;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--green);
+  }
+  .wavelab__unit {
+    font-size: 0.9rem;
+    color: var(--muted-on-dark);
+  }
+
+  .wavelab__controls {
+    display: grid;
+    gap: 10px;
+    padding: 4px 6px 6px;
+  }
+  .wavelab__label {
+    font-size: var(--fs-label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-on-dark);
+  }
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 32px;
+    background: transparent;
+    cursor: pointer;
+    --p: 45%;
+  }
+  input[type='range']::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--green) var(--p), rgb(238 242 232 / 0.14) var(--p));
+  }
+  input[type='range']::-moz-range-track {
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--green) var(--p), rgb(238 242 232 / 0.14) var(--p));
+  }
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px;
+    height: 26px;
+    margin-top: -10px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 6px solid var(--green);
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.4);
+    transition: transform 0.2s;
+  }
+  input[type='range']::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 6px solid var(--green);
+  }
+  input[type='range']:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+  }
+  .wavelab__scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--muted-on-dark);
+    margin-top: -6px;
+  }
+  .wavelab__effects {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .wavelab__effects li {
+    padding: 10px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line-dark);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.25;
+    color: var(--muted-on-dark);
+    transition:
+      background-color 0.35s,
+      color 0.35s,
+      border-color 0.35s;
+  }
+  .wavelab__effects li.is-active {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--ink);
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-wavelab]');
+  const canvas = root?.querySelector<HTMLCanvasElement>('[data-wave-canvas]');
+  const input = root?.querySelector<HTMLInputElement>('[data-wave-input]');
+  const readout = root?.querySelector<HTMLElement>('[data-wave-hz]');
+  const effects = root ? [...root.querySelectorAll<HTMLElement>('[data-effect]')] : [];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (root && canvas && input) {
+    const ctx = canvas.getContext('2d')!;
+    let w = 0;
+    let h = 0;
+    let hz = Number(input.value);
+    let shownHz = hz;
+    let phase = 0;
+    let visible = true;
+    let last = performance.now();
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      const lines = 7;
+      const cycles = 0.6 + shownHz * 0.42; // sichtbare Wellen über die Breite
+      for (let l = 0; l < lines; l++) {
+        const t = l / (lines - 1);
+        const amp = h * (0.08 + 0.16 * (1 - Math.abs(t - 0.5) * 1.6)) * (1.1 - shownHz / 30);
+        const offsetY = h * (0.58 + (t - 0.5) * 0.32);
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 3) {
+          const k = (x / w) * cycles * Math.PI * 2;
+          const env = Math.sin((x / w) * Math.PI); // an den Rändern abflachen
+          const y = offsetY + Math.sin(k - phase + t * 0.9) * amp * (0.35 + env * 0.65);
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = l === Math.floor(lines / 2) ? 'rgb(143 214 95)' : `rgba(92, 171, 51, ${0.18 + (1 - Math.abs(t - 0.5) * 2) * 0.4})`;
+        ctx.lineWidth = l === Math.floor(lines / 2) ? 2.5 : 1.5;
+        ctx.stroke();
+      }
+    };
+
+    const loop = (now: number) => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      shownHz += (hz - shownHz) * Math.min(1, dt * 6);
+      phase += dt * (1.2 + shownHz * 0.9);
+      if (visible) draw();
+      requestAnimationFrame(loop);
+    };
+
+    const update = () => {
+      hz = Number(input.value);
+      if (readout) readout.textContent = String(hz);
+      input.setAttribute('aria-valuetext', `${hz} Hertz`);
+      input.style.setProperty('--p', `${((hz - 1) / 11) * 100}%`);
+      const zone = hz <= 4 ? 0 : hz <= 8 ? 1 : 2;
+      effects.forEach((el, i) => el.classList.toggle('is-active', i === zone));
+      if (reduce) {
+        shownHz = hz;
+        draw();
+      }
+    };
+
+    new ResizeObserver(resize).observe(canvas);
+    new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(canvas);
+    input.addEventListener('input', update);
+    update();
+    resize();
+    if (!reduce) requestAnimationFrame(loop);
+  }
+</script>

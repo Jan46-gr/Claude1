@@ -1,0 +1,254 @@
+---
+import { Image } from 'astro:assets';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { studio, verein, hours, hoursNote } from '../data/studio';
+import { slotLabel } from '../lib/hours';
+import vereinLogo from '../assets/img/logo-verein.png';
+
+const year = new Date().getFullYear();
+const links = [
+  { label: 'Studio & Bereiche', href: '/#studio' },
+  { label: 'Tarife', href: '/#tarife' },
+  { label: 'Öffnungszeiten', href: '/#zeiten' },
+  { label: 'Wellengang', href: '/wellengang' },
+  { label: 'SCANECA 3D-Scan', href: '/scaneca' },
+  { label: 'Probetraining', href: '/probetraining' },
+  { label: 'Kontakt', href: '/#kontakt' },
+];
+---
+
+<footer class="footer theme-dark">
+  <div class="container">
+    <div class="footer__cta">
+      <p class="footer__claim">
+        Für Fitness<br /><span class="accent">&amp; Gesundheit.</span>
+      </p>
+      <div class="footer__cta-side">
+        <p class="muted">Komm vorbei und trainier eine Einheit kostenlos – immer unter Voranmeldung.</p>
+        <a class="btn" href="/probetraining" data-magnetic>
+          Probetraining vereinbaren <Icon name="arrow-right" class="btn__icon" />
+        </a>
+      </div>
+    </div>
+
+    <div class="footer__grid">
+      <div class="footer__col">
+        <h2 class="footer__title">Studio</h2>
+        <address>
+          {studio.name}<br />
+          {studio.street}<br />
+          {studio.zip} {studio.city}
+        </address>
+        <a href={studio.phoneHref} class="footer__link"><Icon name="phone" size={16} /> {studio.phone}</a>
+        <a href={`mailto:${studio.email}`} class="footer__link"><Icon name="mail" size={16} /> {studio.email}</a>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__title">Öffnungszeiten</h2>
+        <dl class="footer__hours mono tabular">
+          {
+            hours.map((d) => (
+              <div>
+                <dt>{d.short}</dt>
+                <dd>{d.slots.map(slotLabel).join(' · ')}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="footer__note">{hoursNote}</p>
+      </div>
+
+      <nav class="footer__col" aria-label="Footer-Navigation">
+        <h2 class="footer__title">Seiten</h2>
+        <ul role="list" class="footer__links">
+          {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div class="footer__col">
+        <h2 class="footer__title">Verein</h2>
+        <div class="footer__verein">
+          <Image src={vereinLogo} alt="Logo SFG Bernkastel-Kues e.V." width={56} height={51} class="footer__verein-logo" />
+          <p>
+            {verein.name}<br />
+            {verein.street}<br />
+            {verein.zip} {verein.city}
+          </p>
+        </div>
+        <a href={verein.phoneHref} class="footer__link"><Icon name="phone" size={16} /> {verein.phone}</a>
+        <a href={`mailto:${verein.email}`} class="footer__link"><Icon name="mail" size={16} /> {verein.email}</a>
+        <a href={verein.web} class="footer__link" target="_blank" rel="noopener"><Icon name="arrow-up-right" size={16} /> sfg-bks.de</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© {year} {verein.longName}</p>
+      <ul role="list">
+        <li><a href="/impressum">Impressum</a></li>
+        <li><a href="/datenschutz">Datenschutz</a></li>
+        <li>
+          <a href={studio.facebook} target="_blank" rel="noopener" class="footer__social" aria-label="SFG Studio auf Facebook">
+            <Icon name="facebook" size={18} /> Facebook
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer__giant" aria-hidden="true">
+    <Logo label="" />
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    overflow: hidden;
+    padding-top: clamp(80px, 10vw, 140px);
+    background: var(--ink);
+    border-top: 1px solid var(--line-dark);
+  }
+
+  .footer__cta {
+    display: grid;
+    gap: 32px;
+    padding-bottom: clamp(56px, 8vw, 96px);
+    border-bottom: 1px solid var(--line-dark);
+  }
+  .footer__claim {
+    font-size: clamp(2.6rem, 1rem + 6.4vw, 7rem);
+    font-weight: 800;
+    font-stretch: 112%;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+  }
+  .footer__cta-side {
+    display: grid;
+    gap: 24px;
+    align-content: end;
+    justify-items: start;
+    max-width: 380px;
+  }
+  @media (min-width: 900px) {
+    .footer__cta {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 48px 32px;
+    padding-block: clamp(48px, 7vw, 80px);
+    font-size: 0.95rem;
+  }
+  .footer__col {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+  }
+  .footer__title {
+    font-family: var(--mono);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted-on-dark);
+    margin-bottom: 6px;
+  }
+  address {
+    font-style: normal;
+    line-height: 1.55;
+  }
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text-on-dark);
+    transition: color 0.25s;
+    width: fit-content;
+  }
+  .footer__link:hover,
+  .footer__links a:hover,
+  .footer__bottom a:hover {
+    color: var(--green-soft);
+  }
+  .footer__hours {
+    display: grid;
+    gap: 6px;
+    font-size: 0.82rem;
+  }
+  .footer__hours div {
+    display: grid;
+    grid-template-columns: 2.2em 1fr;
+    gap: 8px;
+  }
+  .footer__hours dt {
+    color: var(--muted-on-dark);
+  }
+  .footer__note {
+    font-size: 0.82rem;
+    color: var(--muted-on-dark);
+  }
+  .footer__links {
+    display: grid;
+    gap: 8px;
+  }
+  .footer__links a {
+    text-decoration: none;
+    transition: color 0.25s;
+  }
+  .footer__verein {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    line-height: 1.55;
+  }
+  .footer__verein :global(.footer__verein-logo) {
+    border-radius: 10px;
+    background: #fff;
+    padding: 2px;
+    flex: none;
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px 32px;
+    padding-block: 28px;
+    border-top: 1px solid var(--line-dark);
+    font-size: 0.85rem;
+    color: var(--muted-on-dark);
+  }
+  .footer__bottom ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+  }
+  .footer__bottom a {
+    text-decoration: none;
+    transition: color 0.25s;
+  }
+  .footer__social {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer__giant {
+    width: min(100% - 2 * var(--gutter), var(--max));
+    margin: 8px auto 0;
+    color: var(--green);
+    opacity: 0.12;
+    margin-bottom: -4%;
+    pointer-events: none;
+  }
+  .footer__giant :global(.logo) {
+    display: block;
+    width: 100%;
+  }
+</style>

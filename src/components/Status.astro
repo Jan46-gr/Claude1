@@ -1,0 +1,64 @@
+---
+/**
+ * Live-Öffnungsstatus (Europe/Berlin). Wird clientseitig berechnet und
+ * jede Minute aktualisiert. Ohne JavaScript bleibt ein neutraler Link.
+ */
+interface Props {
+  compact?: boolean;
+  class?: string;
+}
+const { compact = false, class: className } = Astro.props;
+---
+
+<a
+  href="/#zeiten"
+  class:list={['status', { 'status--compact': compact }, className]}
+  data-status
+  data-state="idle"
+  aria-live="polite"
+>
+  <span class="status__dot" aria-hidden="true"></span>
+  <span class="status__label" data-status-label>Öffnungszeiten</span>
+  {!compact && <span class="status__detail" data-status-detail />}
+</a>
+
+<style>
+  .status {
+    text-decoration: none;
+    padding: 8px 14px 8px 12px;
+    border-radius: 999px;
+    background: rgb(238 242 232 / 0.08);
+    border: 1px solid rgb(238 242 232 / 0.1);
+    color: var(--text-on-dark);
+    transition: background-color 0.3s;
+  }
+  .status:hover {
+    background: rgb(238 242 232 / 0.14);
+  }
+  .status--compact {
+    font-size: 0.85rem;
+  }
+  .status--compact .status__label {
+    font-weight: 550;
+  }
+</style>
+
+<script>
+  import { getStatus, statusText } from '../lib/hours';
+
+  const render = () => {
+    const s = getStatus();
+    const t = statusText(s);
+    const state = s.open ? (s.closingSoon ? 'soon' : 'open') : 'closed';
+    document.querySelectorAll<HTMLElement>('[data-status]').forEach((el) => {
+      el.dataset.state = state;
+      const label = el.querySelector('[data-status-label]');
+      const detail = el.querySelector('[data-status-detail]');
+      if (label) label.textContent = el.classList.contains('status--compact') ? `${t.label} · ${t.detail}` : t.label;
+      if (detail) detail.textContent = t.detail;
+      el.setAttribute('title', 'An Feiertagen können sich die Öffnungszeiten ändern.');
+    });
+  };
+  render();
+  setInterval(render, 30_000);
+</script>

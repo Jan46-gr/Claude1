@@ -1,0 +1,91 @@
+---
+import Icon from '../Icon.astro';
+---
+
+<section class="trial theme-green" aria-labelledby="trial-title">
+  <div class="trial__words" aria-hidden="true">
+    <span data-trial-row="1">Probetraining · Probetraining · Probetraining ·</span>
+    <span data-trial-row="2">Kostenlos · Kostenlos · Kostenlos · Kostenlos ·</span>
+  </div>
+
+  <div class="container trial__inner">
+    <h2 id="trial-title" class="trial__title h1" data-split>Dein erstes Training geht auf uns.</h2>
+    <p class="trial__text" data-reveal>
+      Kostenloses Probetraining – immer unter Voranmeldung. Wir zeigen dir das Studio, die Geräte und
+      finden gemeinsam heraus, was zu dir passt.
+    </p>
+    <div class="btn-row" data-reveal>
+      <a class="btn btn--dark" href="/probetraining" data-magnetic>
+        Jetzt anmelden <Icon name="arrow-right" class="btn__icon" />
+      </a>
+      <a class="btn btn--ghost" href="#tarife">Mitglied werden</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .trial {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(96px, 13vw, 200px);
+    isolation: isolate;
+  }
+  .trial__words {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: grid;
+    align-content: center;
+    gap: 0.1em;
+    font-size: clamp(5rem, 2rem + 12vw, 15rem);
+    font-weight: 900;
+    font-stretch: 120%;
+    letter-spacing: -0.05em;
+    line-height: 0.88;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: rgb(11 16 10 / 0.07);
+    pointer-events: none;
+  }
+  .trial__words span:last-child {
+    margin-left: -30vw;
+  }
+  .trial__inner {
+    display: grid;
+    gap: 28px;
+    justify-items: start;
+  }
+  .trial__title {
+    max-width: 14ch;
+  }
+  .trial__text {
+    max-width: 46ch;
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+  }
+  .trial .btn--ghost {
+    box-shadow: inset 0 0 0 1.5px rgb(11 16 10 / 0.35);
+    --btn-hover: var(--ink);
+    --btn-hover-fg: var(--green);
+  }
+</style>
+
+<script>
+  import { gsap, reduceMotion } from '../../scripts/motion';
+
+  if (!reduceMotion) {
+    const section = document.querySelector('.trial');
+    const rows = document.querySelectorAll<HTMLElement>('[data-trial-row]');
+    rows.forEach((row, i) => {
+      gsap.fromTo(
+        row,
+        { xPercent: i === 0 ? 0 : -20 },
+        {
+          xPercent: i === 0 ? -20 : 0,
+          ease: 'none',
+          scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true },
+        },
+      );
+    });
+  }
+</script>

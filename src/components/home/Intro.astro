@@ -1,0 +1,170 @@
+---
+import Icon from '../Icon.astro';
+import { machines } from '../../data/studio';
+import { weeklyOpenHours } from '../../lib/hours';
+
+const values = [
+  {
+    icon: 'accessible',
+    title: 'Barrierefrei',
+    text: 'Unser Studio ist barrierefrei – damit wirklich jeder bei uns trainieren kann.',
+  },
+  {
+    icon: 'badge',
+    title: 'Lizenzierte Trainer',
+    text: 'Qualifiziertes Personal begleitet dich – vom Probetraining bis zum individuellen Plan.',
+  },
+  {
+    icon: 'calendar',
+    title: 'Fair & flexibel',
+    text: 'Monatlich kündbar, keine Jahresverträge. Eine Ruhendstellung ist möglich.',
+  },
+  {
+    icon: 'users',
+    title: 'Vom Verein',
+    text: 'Kein Konzern: Hinter dem Studio steht der SFG Bernkastel-Kues e.V. – mit Fokus auf deine Gesundheit.',
+  },
+] as const;
+
+const hoursPerWeek = weeklyOpenHours();
+---
+
+<section id="intro" class="intro section theme-light" aria-labelledby="intro-title">
+  <div class="container">
+    <h2 id="intro-title" class="eyebrow" data-reveal>Über uns</h2>
+    <p class="intro__statement" data-scrub>
+      Gegründet 1991 als SFG Fitnesstreff, seit 2022 das SFG Studio in Mülheim an der Mosel. Ein Studio vom
+      Verein – für alle, die <em>stärker, beweglicher und gesünder</em> werden wollen.
+    </p>
+
+    <ul role="list" class="values">
+      {
+        values.map((v) => (
+          <li class="value" data-reveal>
+            <span class="value__icon">
+              <Icon name={v.icon} size={26} />
+            </span>
+            <h3 class="h3">{v.title}</h3>
+            <p class="muted">{v.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <dl class="stats">
+      <div class="stat" data-reveal>
+        <dt>gegründet</dt>
+        <dd class="tabular"><span data-count="1991" data-from="1950" data-grouping="false">1991</span></dd>
+      </div>
+      <div class="stat" data-reveal>
+        <dt>Stunden pro Woche geöffnet</dt>
+        <dd class="tabular">
+          <span data-count={hoursPerWeek} data-decimals="1">{hoursPerWeek.toLocaleString('de-DE')}</span>
+        </dd>
+      </div>
+      <div class="stat" data-reveal>
+        <dt>Trainingsbereiche</dt>
+        <dd class="tabular"><span data-count="5">5</span></dd>
+      </div>
+      <div class="stat" data-reveal>
+        <dt>Geräte im Gerätepark</dt>
+        <dd class="tabular"><span data-count={machines.length}>{machines.length}</span></dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .intro__statement {
+    margin-top: 28px;
+    font-size: clamp(1.75rem, 0.9rem + 3.2vw, 4rem);
+    font-weight: 700;
+    font-stretch: 106%;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  .intro__statement em {
+    font-style: normal;
+    color: var(--green-text);
+  }
+
+  .values {
+    margin-top: clamp(56px, 8vw, 112px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .value {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: 28px 26px 32px;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--line);
+    transition:
+      transform 0.5s var(--ease-out),
+      box-shadow 0.5s var(--ease-out);
+  }
+  .value:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px -28px rgb(11 16 10 / 0.35);
+  }
+  .value__icon {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: var(--green-tint);
+    color: var(--green-text);
+    margin-bottom: 18px;
+    transition:
+      transform 0.6s var(--ease-out),
+      background-color 0.4s,
+      color 0.4s;
+  }
+  .value:hover .value__icon {
+    transform: rotate(-8deg) scale(1.06);
+    background: var(--green);
+    color: var(--ink);
+  }
+
+  .stats {
+    margin-top: clamp(56px, 8vw, 96px);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid var(--line);
+  }
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 8px;
+    padding: 28px 16px 8px 0;
+  }
+  .stat dd {
+    font-size: clamp(2.6rem, 1.4rem + 4vw, 5.5rem);
+    font-weight: 800;
+    font-stretch: 110%;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .stat dt {
+    font-family: var(--mono);
+    font-size: var(--fs-label);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  @media (min-width: 900px) {
+    .stats {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .stat + .stat {
+      padding-left: 24px;
+      border-left: 1px solid var(--line);
+    }
+  }
+</style>

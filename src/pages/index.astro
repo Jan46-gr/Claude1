@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Marquee from '../components/home/Marquee.astro';
+import Intro from '../components/home/Intro.astro';
+import Areas from '../components/home/Areas.astro';
+import Offers from '../components/home/Offers.astro';
+import Pricing from '../components/home/Pricing.astro';
+import Hours from '../components/home/Hours.astro';
+import News from '../components/home/News.astro';
+import TrialCta from '../components/home/TrialCta.astro';
+import Contact from '../components/home/Contact.astro';
+---
+
+<Base schema>
+  <Hero />
+  <Marquee
+    items={['Freihantel', 'Cardio', 'Gerätepark', 'Gewichtheben', 'Wellengang', 'SCANECA 3D', 'BIA-Analyse', 'Trainingsplan']}
+  />
+  <Intro />
+  <Areas />
+  <Offers />
+  <Pricing />
+  <Hours />
+  <News />
+  <TrialCta />
+  <Contact />
+</Base>

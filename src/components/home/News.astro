@@ -1,0 +1,98 @@
+---
+import Icon from '../Icon.astro';
+import { news } from '../../data/studio';
+---
+
+<section id="aktuelles" class="news section theme-light-2" aria-labelledby="news-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" data-reveal>Aktuelles</p>
+      <h2 id="news-title" class="h2" data-split>Was gerade im Studio passiert.</h2>
+    </div>
+
+    <ul role="list" class="news__grid">
+      {
+        news.map((n) => (
+          <li data-reveal>
+            <article class="card">
+              <span class="card__tag mono">{n.tag}</span>
+              <h3 class="card__title">{n.title}</h3>
+              <p class="muted">{n.text}</p>
+              {n.href && (
+                <a
+                  href={n.href}
+                  class="link-arrow card__link"
+                  target={n.external ? '_blank' : undefined}
+                  rel={n.external ? 'noopener' : undefined}
+                >
+                  {n.linkLabel}
+                  <Icon name={n.external ? 'arrow-up-right' : 'arrow-right'} />
+                </a>
+              )}
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .news__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  .news__grid li {
+    display: grid;
+  }
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 26px;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--line);
+    transition:
+      transform 0.5s var(--ease-out),
+      box-shadow 0.5s var(--ease-out);
+  }
+  .card:has(.card__link):hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px -30px rgb(11 16 10 / 0.4);
+  }
+  .card__tag {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--green-tint);
+    color: var(--green-text);
+  }
+  .card__title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-stretch: 104%;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .card .muted {
+    font-size: 0.95rem;
+  }
+  .card__link {
+    margin-top: auto;
+    padding-top: 8px;
+    font-size: 0.95rem;
+  }
+  /* ganze Karte klickbar */
+  .card__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+</style>

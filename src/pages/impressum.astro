@@ -1,0 +1,51 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { verein, studio } from '../data/studio';
+---
+
+<Legal title="Impressum">
+  <p class="note">
+    Entwurf für den Website-Vorschlag: Die gelb markierten Angaben müssen aus dem bestehenden Impressum übernommen
+    bzw. vom Verein ergänzt werden.
+  </p>
+
+  <h2>Angaben gemäß § 5 DDG</h2>
+  <p>
+    {verein.longName}<br />
+    {verein.street}<br />
+    {verein.zip} {verein.city}
+  </p>
+
+  <h3>Vertreten durch</h3>
+  <p><span class="todo">[Vertretungsberechtigter Vorstand]</span></p>
+
+  <h3>Registereintrag</h3>
+  <p>
+    Eintragung im Vereinsregister<br />
+    Registergericht: <span class="todo">[Amtsgericht]</span><br />
+    Registernummer: <span class="todo">[VR …]</span>
+  </p>
+
+  <h2>Kontakt</h2>
+  <p>
+    Telefon: <a href={verein.phoneHref}>{verein.phone}</a><br />
+    Telefax: {verein.fax}<br />
+    E-Mail: <a href={`mailto:${verein.email}`}>{verein.email}</a>
+  </p>
+
+  <h3>SFG Studio</h3>
+  <p>
+    {studio.street}, {studio.zip} {studio.city}<br />
+    Telefon: <a href={studio.phoneHref}>{studio.phone}</a><br />
+    E-Mail: <a href={`mailto:${studio.email}`}>{studio.email}</a>
+  </p>
+
+  <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+  <p><span class="todo">[Name, Anschrift]</span></p>
+
+  <h2>Verbraucherstreitbeilegung</h2>
+  <p>
+    Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
+    teilzunehmen. <span class="todo">[bitte vom Verein bestätigen]</span>
+  </p>
+</Legal>
