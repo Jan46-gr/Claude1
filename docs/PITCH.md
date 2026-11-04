@@ -37,3 +37,15 @@
 12. **Fotos:** Die aktuellen Bilder stammen aus Screenshots der alten Seite und sind unscharf. Ein kurzes Foto-Shooting im Studio würde die Wirkung deutlich steigern.
 13. **Logo:** Es wurde aus der alten Seite vektorisiert. Eine Originaldatei (SVG/AI) wäre besser.
 14. **Hosting und Domain:** Wer betreibt sfg-studio.de aktuell? Netlify wäre für eine statische Seite kostenlos bzw. sehr günstig.
+
+## Datenschutz (DSGVO)
+
+**Schon erledigt:** Die Seite setzt keine Cookies, nutzt kein Tracking und lädt keine Google Fonts. Karte und Facebook sind nur verlinkt. Statt reCAPTCHA schützt ein unsichtbarer Honeypot vor Spam.
+
+**Vor dem Livegang:**
+
+15. **Datenschutzerklärung fertigstellen:** Hosting-Anbieter, Formular-Dienst und Speicherdauer eintragen.
+16. **Netlify ist ein US-Anbieter:** Es braucht einen Auftragsverarbeitungsvertrag (AVV), und die Übermittlung in die USA muss abgesichert sein (z. B. EU-US Data Privacy Framework). Alternative: ein Hoster in der EU.
+17. **Gesundheitsdaten vermeiden:** Das Freitextfeld im Probetraining-Formular weist jetzt ausdrücklich darauf hin, keine Beschwerden anzugeben. Gesundheitsdaten fallen unter Art. 9 DSGVO und bräuchten eine ausdrückliche Einwilligung.
+18. **Datenschutzbeauftragte:r:** Einen braucht der Verein, wenn in der Regel mindestens 20 Personen ständig mit personenbezogenen Daten arbeiten (§ 38 BDSG). Ob das zutrifft, muss der Verein klären.
+19. **Bildrechte:** Die Produktfotos von SCANECA und wellengang stammen vermutlich von den Herstellern. Die Nutzungsrechte müssen geklärt sein. Für Fotos mit erkennbaren Personen braucht es deren Einwilligung.

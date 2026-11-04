@@ -145,7 +145,15 @@ const levels = ['Einsteiger:in', 'Wiedereinsteiger:in', 'Fortgeschritten'];
               </div>
               <div class="field field--full">
                 <label for="p-msg">Noch etwas, das wir wissen sollten?</label>
-                <textarea id="p-msg" name="nachricht" class="input" placeholder="z. B. Beschwerden, Wunschtermin …"></textarea>
+                <textarea
+                  id="p-msg"
+                  name="nachricht"
+                  class="input"
+                  placeholder="z. B. Wunschtermin oder Fragen …"
+                  aria-describedby="p-msg-hint"></textarea>
+                <p id="p-msg-hint" class="field__hint">
+                  Bitte hier keine Angaben zu Erkrankungen oder Beschwerden – das besprechen wir gern persönlich.
+                </p>
               </div>
             </div>
             <label class="check">
@@ -451,6 +459,10 @@ const levels = ['Einsteiger:in', 'Wiedereinsteiger:in', 'Fortgeschritten'];
   }
   textarea.input {
     min-height: 110px;
+  }
+  .field__hint {
+    font-size: 0.82rem;
+    color: var(--text-muted);
   }
   .check {
     margin-top: 6px;
