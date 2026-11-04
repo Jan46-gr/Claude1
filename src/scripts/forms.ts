@@ -5,7 +5,11 @@
 const encode = (data: FormData) =>
   new URLSearchParams([...data.entries()].map(([k, v]) => [k, String(v)])).toString();
 
-const isLocal = () => ['localhost', '127.0.0.1'].includes(location.hostname) || import.meta.env.DEV;
+const isLocal = () =>
+  import.meta.env.DEV ||
+  import.meta.env.PUBLIC_DEMO_FORMS === 'true' ||
+  !/^https?:$/.test(location.protocol) ||
+  ['localhost', '127.0.0.1'].includes(location.hostname);
 
 export async function submitForm(form: HTMLFormElement) {
   const data = new FormData(form);
